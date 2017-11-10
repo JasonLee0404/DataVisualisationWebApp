@@ -1,5 +1,4 @@
-Just a recap of my basic goals and my stretch goals
-:read out
+
 
 Ive been able to achieve working with API, real time weather
 Ive also been able to learned how to use CSS to increase the aesthetic, but due to
@@ -10,10 +9,7 @@ Ive also been able to take some feedback, taking into account color blindness by
 Ive worked on the map, and got a clear idea of how to implement it, but since Ive not been able to find out how to fit that into my sketch, so ive decided not to use it
 
 
-
-Talk about the problems, Ive got heaps, ive recored it into a log book, from detail problems to high level problems. 
-
-So I'll just mentioned some big high level problems
+big high level problems
 
 -integrating p5.js / processing with web style programming, not be able to use other great powerful libraries like chart.js, d3.js
 
