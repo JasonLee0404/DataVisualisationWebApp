@@ -1,0 +1,540 @@
+LOGBOOK 
+
+-P5.js or Processing, which is better ?
+-The process so far been: 
+	+load the data in using functions: loadTable(), loadRow(),...
+	+catch data into variables int a = Table.row[2],...
+	+assign variables to object
+	+inside the class of the object, create functions for drawing, 
+	+displaying,according to the parameter passed in(example: draw a circle based on 2*data passed in)
+
+Example: mapping citibike data
+    having a "trip" object, a start variable, a destination variable, and then a function called draw, to draw a line or create an animation based on those variables passed in --> we then got data visualisation. The rest is just scaling
+
+    This way, you decide how the visualisation is related to the data
+    example: diameter = 2 * data passed in
+
+    You can also create a Table object to access data in a more organised way
+
+---------------------------------------------------------------------------------Animation
+
+function draw()
+{
+	ellipse(20,20,20,20);
+}
+
+although an ellipse is drawn over and over again, it is at the exact same position
+
+function draw()
+{
+	ellipse(mouseX,mouseY,20,20);
+}
+
+Now the ellipse is actually moving since mouseX and mouseY is changing over time.
+You will have to create a variable, or know the connection between the animation and time
+So you have 2 relationships to define: visual - time, visual - data
+
+---------------------------------------------------------------------------------
+
+A map can be import using till map, a map is just a back ground of the canvas, under the form of an image. After importing a map, you can create objects on it later
+
+get a map from mapbox.js
+
+https://www.youtube.com/watch?v=ZiYdOwOrGyc
+---------------------------------------------------------------------------------
+Webmercator projections
+
+Understand what type of projections it is using so i can apply the math to calculate the lat/long accurately
+
+go to MapboxAPI, get the url
+
+have a loading function
+
+var mapimg;
+
+function preload()
+{
+	mapimg = loadImage('....URL.....lat/long.....pixel level...=your-access-token ')
+	//now you need to get your API token	
+
+	//lat/long = zoom level
+	//pixel level ex: 600x600
+}
+
+//How to get your API token
+
+
+function setup()
+{
+	createCanvas(600x600);
+	image = mapimg(0,0);
+}
+
+//go back and change the properties in the API call:
+
+change from 'streets-v8' to 'dark-v9' or something similar
+
+
+.zoom level. something. angle ->change the angle
+"To know this, you have to read the API documentation"
+
+Play around with it, 0.0 for lat/long
+					16, or 4 for zoom level
+
+Change the pixel of canvas, and API call to 1024x512
+
+---------------------------------------------------------------------------------Dealing with lat/long
+
+var clat = 0; //center lattitude
+var clong = 0; //center longtitude
+
+var lat = 0;
+var long = 0;
+
+How to convert?
+
+using gradients +180 pi,  -180negative pi for lat
+				-90pi and 90 pi for long
+
+example: Shanghai
+
+//31.2304 N, 121.4737 E
+// if this were west, it would be negative
+
+var clat = 0;
+var clong = 0;
+
+var lat = 31.2304;
+var long = 121.4737;
+
+
+Use formulas on 'wikipedia: web mercator' to convert
+
+the number of 128 is to be changed to pixel range/2
+
+lamda = longtitude
+phi = lattitude
+
+
+var zoom = 1;
+//take in a longtitude value
+//you have to convert to radians
+//this is still in degrees
+function mercX(lon) 
+{
+ 	lon = radians(lon);
+	var a = (128/PI) * pow(2,zoom); //change 128 to 256
+	var b = lon + PI;
+	return a*b;
+}
+
+function mercY(lat)
+{
+	lat = radians(lat);
+	var a = (128/PI) * pow(2,zoom); //change 128 to 256
+	var b = tan(PI/4 + lat/2);
+	var c = PI - log(b);
+	return a*c;
+}
+
+function setup()
+{
+	createCanvas(1024,512);
+	translate(width/2,height/2); //moving origin point from top left to center
+	imageMode(CENTER);
+	image(mapimg,0,0);
+
+	var cx = mercX(clon);
+	var cy = mercY(clat)
+
+	var x = mercX(lon) - cx;
+	var y = mercY(lat) - cy;
+
+	//draw a circle
+
+}
+
+-------------------------------------------------------------------------------
+//Dealing with many variables at once
+
+var earthquakes;
+
+function preload()
+{
+	mapimg = loadImage('....API URL....');
+	earthquakes = loadStrings(.....csv link....);
+}
+
+function setup()
+{
+
+	//loadString give you an array of strings
+	//before mercX
+
+	for(var i = 0;i < earthquakes.length;i++)
+	{
+		var data = earthquakes[i].split(/,/);//split everything by , // means pattern
+		console.log(data);
+		var lat = data[1];
+		var lon = data[2];
+
+		//mercX mercY code, so that it does this for every element in array
+	}
+}
+
+//having circles size depend on their magnitude
+
+//add in the for loop
+
+var mag = data[3];  //magnitude in the table
+
+//pay attention to the scale, because mag 5 earthquake is 10 times bigger than mag 6 earthquake
+
+mag = pow(10,mag); // eliminate the difference
+mag = sqrt(mag);
+
+var diameter = map(mag,0,magmax,0,180);//60 to start with
+var magmax = sqrt(pow(10,10))
+
+
+--------------------------------------------------------------------------------How to create Buttons in processing
+
+Button
+
+--------------------------------------------------------------------------------
+Plan:
+Have a 3D shape, listing out earth quakes, storms, typhoons, other type of stuff
+
+You can use outside dataset, or you can just google top20 and then create your own dataset
+
+Or:
+
+Google terrorist attack -> get the destination -> get lattitude,longtitude -> map it on P3D
+
+This way, your data is shorter, and easier to map
+
+Or it could just be the course of WW2, battle, deaths, ...
+
+Top 20 battles based on casualties
+Top 20 countries with biggest casualties
+Stretch goals: visualise the marching of allies
+Visualise D-day
+
+------------------------------------------------------------------------------
+OpenWeather map
+------------------------------------------------------------------------------
+An interactive app, with buttons on it, and use design concepts, like a phone weather app, that's enough. Stick 100% with this idea
+------------------------------------------------------------------------------
+Log in with think, create, code to use the ide
+------------------------------------------------------------------------------
+createButton()
+createInput()
+var slider = createSlider()
+
+
+
+button = createButton("go");
+button.mousePressed(changeColor);
+
+function changeColor
+{
+	....
+}
+
+ellipse(slide.value(),slide.value(),20,20)
+
+value()
+//pulls out value of things
+//important function
+
+you have to put text in draw function
+
+------------------------------------------------------------------------------
+Techniques to have something show up when you click
+
+//have them out of sight first, using xord, ycord
+//as soon as you clicked, or keypressed, or any other events happen, you change xcord, ycord to the position you want
+
+
+callback
+button.mousePressed(___callbackfunction___)
+
+
+------------------------------------------------------------------------------
+CSS in p5.js
+//create some text paragraph
+txt = createP('some text')
+
+//style it
+txt.style("background-color","pink");
+
+
+//create a button for changing style
+button = createButton("go change style");
+button.mousePressed(changeStyle);
+
+function changeStyle()
+{
+	txt.style("background", "pink");
+	txt.style("padding","24px");
+}
+
+//Similarly
+
+txt.mouseOver(changeStyle);
+txt.mouseOut(revertStyle);
+
+//So with a library, all you gotta do is get the prewritten files into the same folder, and then you will be able to use it with them
+//a library simply = pre-written files by someone, and give you the functions to use it. This is like an "off-line API"
+
+//You have to put index.html and sketch.js in the same folder
+
+------------------------------------------------------------------------------
+//print() print to the console, not the canvas, to print to the canvas, use text
+
+//Now know how to load data in, and print the data
+
+//created slider and buttons
+-----------------------------------------------------------------
+//In the end, all the things on your canvas are objects.
+//good practice to seperate them, so you can later style them at once
+
+//canvas is just part of your big windows in web browser
+//size control the size of web browser, not canvas
+
+//why is not index responding to the file in there
+------------------------------------------
+//you never know if it is loading or not
+//having a black circle at the corner to remind you
+
+//2 problems you need to solve, live preview and load data
+
+--------------------------------------------------------------------------------
+Took the whole day for it to load data
+
+so now data can be loaded but for some reason only through the P3 editor
+
+--------------------------------------------------------------------------------Due to security reasons, cannot load local files in google chrome
+
+
+------------------------------------------------------------------------------
+Learn how to run node.js
+
+Command  + shift + R to grab all changes
+
+every time you edit source code
+------------------------------------------------------------------------------------
+
+Ctrl + Shift + R is enough, no need for refreshing the page
+
+------------------------------------------------------------------------------------
+
+Data from Bureau of Meteorology is too technical
+It is easier if you get the neccessary data and create your own CSV
+
+------------------------------------------------------------------------------------
+
+//learning how to deal with data indexing
+//turns out that dealing with JSON when using Javascript is easier
+
+	//dealing with data
+	var tableArray = table.getArray();
+	for (var i = 0; i < tableArray.length; i++)
+		print(tableArray[i]);
+    	print(tableArray[0][1]);
+
+------------------------------------------------------------------------------------
+Stretch goals: get real time API data
+			   learn how to get JSON
+Added a backup JS file sketchBackup.js
+Things with API, is that you gotta pay sometimes
+------------------------------------------------------------------------------------
+
+VISUALISATION - meaning i gotta have some charts in there
+---------------------------------------------------------------------------------------
+API request features are connected using & ___ = ___ 
+example: &units=metrics
+ 		 &APIID=......
+
+---------------------------------------------------------------------------------------
+Finished API calls, know how to use API
+
+Now all you gotta do is focus on visualisation and find out ideas on how to compare data together
+
+-Use workshop for feedback session
+
+
+---------------------------------------------------------------------------------------
+Learn how events work. Now you gotta figure out the relationship between events and draw()
+---------------------------------------------------------------------------------------------
+translate(x,y) move the point of origin to the specified location (x,y)
+Learned how to create a bar graph google, learn function through daniel shiffman
+push pop rotate translate 
+
+//translate might be useful when moving a whole complex combination, since it is accumulated just like fill
+
+//rotate() always happen around the point of origin
+//angleMode(DEGREE), //default unit is radian(arc length)
+
+//rotate(angle) also works like fill and translate
+
+//push() is like save current drawing state (fill, translate,...) BEFORE I make any changes
+//pop() is like put it off, UNDOING things
+
+------------------------------------------------------------------------------------------------
+//when drawing a graph, down is positive, up is negative
+------------------------------------------------------------------------------------------------
+//Learn about D3.js
+//Problem comes up: should I be using d3 as part of my project, or that is too much hassle?
+
+------------------------------------------------------------------------------------------------
+
+//it seems like objects in javascript can only be used to access information, not create new??
+
+------------------------------------------------------------------------------------
+Constructor functions + functions in objects -> these are reusable and used to make it convenient everytime you initiate an object or call a function on that object
+
+-------------------------------------------------------------------------------------
+So the way you want to develop it right now is into files, with objects, and then whenever you finish, you wanna create a main files to initiate and call functions on those objects
+
+
+
+
+//constructor function is exactly like normal function. Only difference is that 
+//the syntax for creating function
+
+this.display = function(){
+	
+}
+
+
+var object = {
+	//literal object, object already exist
+}
+
+function createObject(){
+	//idea of an object, template only, object not exists yet
+
+	//no need to do this
+	return this; //return the newly created object
+}
+
+constructor function only works with "new" keyword
+
+------------------------------------------------------------------------------------
+//you gotta check the scope of the variables first. A good practice is to declare it first as global, and then assign it later on
+
+
+//you have to write down the things you actually want, and then progress from there
+
+//review back the way you plot different dimensions in your data. Learn how to plot
+//other charts
+
+------------------------------------------------------------------------------------
+
+events only works with html elements, but luckily, you can actually move around the html elements
+
+------------------------------------------------------------
+
+For pop up box, this is exactly what you need
+
+https://processing.org/examples/rollover.html
+
+
+-------------------------------------------------------------------------------------Instead of using mouseOver, you can just use dist + mouseX and mouseY to manually 
+check for the distance and implement the logic behind mouseOver
+--------------------------------------------------------------------------------------
+//now you can create the mouseOver effect by yourself
+
+//data source:http://www.bom.gov.au/climate/averages/tables/cw_023000.shtml
+
+
+
+
+
+//THIS IS EXACTLY WHAT YOU NEED
+https://www.youtube.com/watch?v=4UoUqnjUC2c - not AJAX call
+https://www.youtube.com/watch?v=UNtqhnhD-wo - AJAX call
+
+
+----------------------------------------------------------------------------------------
+
+no need for AJAX, historical data is a top priority
+
+gotta keep track of the style, sometimes color maybe disguishing
+
+you also gotta hit submit for it to display the program
+
+---------------------------------------------------------------------------------------
+Thermostat success - adjust the scale on thermostat
+
+print(historicalWeather.getString(4,1)) //4,1 is the coordinate of the info in the chart
+
+---------------------------------------------------------------------------------------
+What you can do to enhance interaction is to seperate the bars into objects, so each bar is an object itself, and has its own clicked function
+
+4 is y, and 1 is x (0 is included)
+
+---------------------------------------------------------------------------------------
+
+What you can do to enhance interaction is to seperate the bars into objects, so each bar is an object itself, and has its own clicked function
+
+Another thing you can do is have the humidity tear drop change color, and take same info from the source as the api
+
+learn how to implement slider into the sketch, using if else for different value
+of the slider
+
+---------------------------------------------------------------------------------------
+Reason that i has to start from 1 is because 0 is the slot with strings, not numbers
+
+Adding information about seasons might be a good idea, as a pop up box or maybe toolbar
+
+
+----------------------------------------------------------------------------------------
+Focus on the toolbox, timelines, checkbox for displaying information
+Put them together, choose a color scheme, master the mouseOver events, 
+Horizontal bar - spotify - is also an idea
+Axis and lines, marks, identify the pixel of the screen 
+Have highlight or something similar whenever you mouseOver
+Stick to the rubric
+
+
+var c = color(250,0,10); // this is how you assign a color
+
+//found out how to display toolbox
+//what's left is how to use slider
+
+there is a function call clear() in p5.js
+
+----------------------------------------------------------------------------------------
+Analyze Michael's code. it works !!!
+
+
+
+---------------------------------------------------------------------------------------
+Combine the trendlineObjects and the dataViz thermo together
+
+--------------------------------------------------------------------------------------
+
+Try not to use translate so that you don't have to rearrange the coordinates
+
+---------------------------------------------------------------------------------------
+
+Take into account color blindness - design icons
+
+
+---------------------------------------------------------------------------------------
+
+Figure out how to create animation with slider. next goal, create a difference chart
+object, and design animation for slider. Compare different parameters of current weather and historical weather. If time is not enough, compare one parameter only
+
+
+--------------------------------------------------------------------------------------
+challenge: variables in processing are non negative
+---------------------------------------------------------------------------------------
+*been able to get the weather in. now adjust the color, slider position, labels, and add more parameters-dimension
+
+adding the if else statement also
+
+
+//animation over time ready

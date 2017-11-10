@@ -1,0 +1,26 @@
+Just a recap of my basic goals and my stretch goals
+:read out
+
+Ive been able to achieve working with API, real time weather
+Ive also been able to learned how to use CSS to increase the aesthetic, but due to
+the timeline given, I decided to focus on interactivity, since interactivity in p5.js and processing is something that Ive not mastered yet
+
+Ive also been able to take some feedback, taking into account color blindness by using icons, and tried to work on more interactions, comparing different cities and overtime
+
+Ive worked on the map, and got a clear idea of how to implement it, but since Ive not been able to find out how to fit that into my sketch, so ive decided not to use it
+
+
+
+Talk about the problems, Ive got heaps, ive recored it into a log book, from detail problems to high level problems. 
+
+So I'll just mentioned some big high level problems
+
+-integrating p5.js / processing with web style programming, not be able to use other great powerful libraries like chart.js, d3.js
+
+-did also had to studied how set up a nodejs server in a simple way, got some problem with google chrome at the start
+
+-colors, design, interfaces, definitely need to learn more about this, there is so much more to learn and the deeper i dig in, the more sophisticated it gets
+
+-Overall, I learned a lot of new things, and plan to use this for a summer project where i can give more time, more trials, and elaborate on a lot of this.
+
+-Animations is something i really want to do, but my skills hasnt been there yet
